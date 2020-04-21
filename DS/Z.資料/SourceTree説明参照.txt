@@ -1,0 +1,16 @@
+SourceTreeはGitやGitHubのGUI化されたものとして、Gitの説明と共通しているのがほとんどです。
+そのため、資料は多くありますので実際に説明資料を作るよりも参考になったサイトのURLを乗せるだけに
+済ませようと思います。
+
+ブランチ操作 - SourceTree
+https://qiita.com/inabe49/items/be38f569040aed7d85b0
+
+【sourcetree】commitしてpushする手順
+https://qiita.com/DATTO/items/b14644a0c54844cc33a2
+
+リモートリポジトリ pull
+https://backlog.com/ja/git-tutorial/stepup/14/
+
+リモートリポジトリ fetch
+https://backlog.com/ja/git-tutorial/stepup/15/
+
