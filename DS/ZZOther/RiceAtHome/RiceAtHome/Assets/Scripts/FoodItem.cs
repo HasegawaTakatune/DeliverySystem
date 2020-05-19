@@ -19,17 +19,17 @@ public class FoodItem : MonoBehaviour
     /// <summary>
     /// 食品名
     /// </summary>
-    [SerializeField] private Text food;
+    [SerializeField] private Text food = default;
 
     /// <summary>
     /// 値段
     /// </summary>
-    [SerializeField] private Text price;
+    [SerializeField] private Text price = default;
 
     /// <summary>
     /// アイコン
     /// </summary>
-    [SerializeField] private Image icon;
+    [SerializeField] private Image icon = default;
 
     /// <summary>
     /// 食品ID

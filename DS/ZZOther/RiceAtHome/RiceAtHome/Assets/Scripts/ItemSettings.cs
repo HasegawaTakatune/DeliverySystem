@@ -37,22 +37,45 @@ public class ItemSettings : MonoBehaviour
     private const string STORE_ID_COLUMN = "StoreId";
 
     /// <summary>
+    /// 店スクロールビュー
+    /// </summary>
+    [SerializeField] private GameObject StoreScrollView = default;
+    /// <summary>
     /// 店コンテンツ
     /// </summary>
-    [SerializeField] private GameObject StoreContent;
+    [SerializeField] private GameObject StoreContent = default;
     /// <summary>
     /// 店プレファブ
     /// </summary>
-    [SerializeField] private GameObject StorePrefab;
+    [SerializeField] private GameObject StorePrefab = default;
 
+    /// <summary>
+    /// 食品スクロールビュー
+    /// </summary>
+    [SerializeField] private GameObject FoodScrollView = default;
     /// <summary>
     /// 食品コンテンツ
     /// </summary>
-    [SerializeField] private GameObject FoodContent;
+    [SerializeField] private GameObject FoodContent = default;
     /// <summary>
     /// 食品プレファブ
     /// </summary>
-    [SerializeField] private GameObject FoodPrefab;
+    [SerializeField] private GameObject FoodPrefab = default;
+
+    /// <summary>
+    /// ユーザ情報
+    /// </summary>
+    [SerializeField] private GameObject UserInfo = default;
+
+    /// <summary>
+    /// 店ID
+    /// </summary>
+    private string storeId;
+
+    /// <summary>
+    /// 食品リスト
+    /// </summary>
+    private List<string> foodList = new List<string>();
 
 
     /// <summary>
@@ -63,6 +86,11 @@ public class ItemSettings : MonoBehaviour
     /// <param name="iconNameList"></param>
     private void ShowStoreItems(List<string> nameList, List<string> idList, List<string> iconNameList)
     {
+        ClearStoreContent();
+
+        StoreScrollView.SetActive(true);
+        FoodScrollView.SetActive(false);
+
         List<StoreItem> storeList = new List<StoreItem>();
         for (int i = 0; i < nameList.Count; i++)
         {
@@ -72,7 +100,7 @@ public class ItemSettings : MonoBehaviour
             store.AddCallback(SelectedStoreCallback);
             storeList.Add(store);
 
-            GetStoreIcon(iconNameList[i], store);
+            //GetStoreIcon(iconNameList[i], store);
         }
     }
 
@@ -85,6 +113,11 @@ public class ItemSettings : MonoBehaviour
     /// <param name="iconNameList"></param>
     public void ShowFoodItems(List<string> nameList, List<int> priceList, List<string> idList, List<string> iconNameList)
     {
+        ClearFoodContent();
+
+        FoodScrollView.SetActive(true);
+        StoreScrollView.SetActive(false);
+
         List<FoodItem> foodList = new List<FoodItem>();
         for (int i = 0; i < nameList.Count; i++)
         {
@@ -94,7 +127,7 @@ public class ItemSettings : MonoBehaviour
             food.AddCallback(SelectedFoodCallback);
             foodList.Add(food);
 
-            GetFoodIcon(iconNameList[i], food);
+            //GetFoodIcon(iconNameList[i], food);
         }
     }
 
@@ -103,33 +136,38 @@ public class ItemSettings : MonoBehaviour
     /// </summary>
     private void GetStore()
     {
-        NCMBQuery<NCMBObject> query = new NCMBQuery<NCMBObject>(STORE_MASTER_TABLE);
-        query.FindAsync((List<NCMBObject> objList, NCMBException e) =>
-        {
-            if (e == null)
-            {
-                List<string> nameList = new List<string>();
-                List<string> idList = new List<string>();
-                List<string> iconNameList = new List<string>();
+        //NCMBQuery<NCMBObject> query = new NCMBQuery<NCMBObject>(STORE_MASTER_TABLE);
+        //query.FindAsync((List<NCMBObject> objList, NCMBException e) =>
+        //{
+        //    if (e == null)
+        //    {
+        //        List<string> nameList = new List<string>();
+        //        List<string> idList = new List<string>();
+        //        List<string> iconNameList = new List<string>();
 
-                for (int i = 0; i < objList.Count; i++)
-                {
-                    string name = objList[i][NAME_COLUMN].ToString();
-                    string id = objList[i][ID_COLUMN].ToString();
-                    string iconName = objList[i][ICON_NAME_COLUMN].ToString();
+        //        for (int i = 0; i < objList.Count; i++)
+        //        {
+        //            string name = objList[i][NAME_COLUMN].ToString();
+        //            string id = objList[i][ID_COLUMN].ToString();
+        //            string iconName = objList[i][ICON_NAME_COLUMN].ToString();
 
-                    nameList.Add(name);
-                    idList.Add(id);
-                    iconNameList.Add(iconName);
-                }
-                ShowStoreItems(nameList, idList, iconNameList);
-            }
-            else
-            {
-                // NCMBException
-            }
+        //            nameList.Add(name);
+        //            idList.Add(id);
+        //            iconNameList.Add(iconName);
+        //        }
+        //        ShowStoreItems(nameList, idList, iconNameList);
+        //    }
+        //    else
+        //    {
+        //        // NCMBException
+        //    }
 
-        });
+        //});
+
+        List<string> nameList = new List<string>() { "軍鶏貴族", "竹屋", "トスバーガー" };
+        List<string> idList = new List<string>() { "STR000001", "STR000002", "STR000003" };
+        List<string> iconNameList = new List<string>();
+        ShowStoreItems(nameList, idList, iconNameList);
     }
 
     /// <summary>
@@ -155,39 +193,53 @@ public class ItemSettings : MonoBehaviour
     }
 
     /// <summary>
+    /// 店のアイテムを削除する。
+    /// </summary>
+    private void ClearStoreContent()
+    {
+        foreach (Transform child in StoreContent.transform)
+            Destroy(child.gameObject);
+    }
+
+    /// <summary>
     /// 食品情報を追加する
     /// </summary>
     /// <param name="storeId"></param>
     private void GetFood(string storeId)
     {
-        NCMBQuery<NCMBObject> query = new NCMBQuery<NCMBObject>(FOOD_MASTER_TABLE);
-        query.WhereEqualTo(STORE_ID_COLUMN, storeId);
-        query.FindAsync((List<NCMBObject> objList, NCMBException e) =>
-        {
-            if (e == null)
-            {
-                List<string> nameList = new List<string>();
-                List<int> priceList = new List<int>();
-                List<string> foodIdList = new List<string>();
-                List<string> iconNameList = new List<string>();
+        //NCMBQuery<NCMBObject> query = new NCMBQuery<NCMBObject>(FOOD_MASTER_TABLE);
+        //query.WhereEqualTo(STORE_ID_COLUMN, storeId);
+        //query.FindAsync((List<NCMBObject> objList, NCMBException e) =>
+        //{
+        //    if (e == null)
+        //    {
+        //        List<string> nameList = new List<string>();
+        //        List<int> priceList = new List<int>();
+        //        List<string> foodIdList = new List<string>();
+        //        List<string> iconNameList = new List<string>();
 
-                for (int i = 0; i < objList.Count; i++)
-                {
-                    string name = objList[i][NAME_COLUMN].ToString();
-                    int price = System.Convert.ToInt32(objList[i][PRICE_COLUMN]);
-                    string foodId = objList[i][ID_COLUMN].ToString();
-                    string iconName = objList[i][ICON_NAME_COLUMN].ToString();
+        //        for (int i = 0; i < objList.Count; i++)
+        //        {
+        //            string name = objList[i][NAME_COLUMN].ToString();
+        //            int price = System.Convert.ToInt32(objList[i][PRICE_COLUMN]);
+        //            string foodId = objList[i][ID_COLUMN].ToString();
+        //            string iconName = objList[i][ICON_NAME_COLUMN].ToString();
 
-                    nameList.Add(name);
-                    priceList.Add(price);
-                    foodIdList.Add(foodId);
-                    iconNameList.Add(iconName);
-                }
+        //            nameList.Add(name);
+        //            priceList.Add(price);
+        //            foodIdList.Add(foodId);
+        //            iconNameList.Add(iconName);
+        //        }
 
-                ShowFoodItems(nameList, priceList, foodIdList, iconNameList);
-            }
-        });
+        //        ShowFoodItems(nameList, priceList, foodIdList, iconNameList);
+        //    }
+        //});
 
+        List<string> nameList = new List<string>() { "唐揚げ", "軟骨唐揚げ", "ポテトフライ", "牛丼", "豚丼", "ネギトロ丼", "ハンバーガー", "てりやきバーガー", "エッグバーガー" };
+        List<int> priceList = new List<int>() { 250, 300, 200, 500, 450, 600, 400, 600, 600 };
+        List<string> foodIdList = new List<string>() { "FOD100001", "FOD100002", "FOD100003", "FOD200001", "FOD200002", "FOD200003", "FOD300001", "FOD300002", "FOD300003" };
+        List<string> iconNameList = new List<string>();
+        ShowFoodItems(nameList, priceList, foodIdList, iconNameList);
     }
 
     /// <summary>
@@ -210,6 +262,15 @@ public class ItemSettings : MonoBehaviour
                 // NCMBException
             }
         });
+    }
+
+    /// <summary>
+    /// 食品のアイテムを削除する
+    /// </summary>
+    private void ClearFoodContent()
+    {
+        foreach (Transform child in gameObject.transform)
+            Destroy(child.gameObject);
     }
 
     /// <summary>
@@ -246,6 +307,7 @@ public class ItemSettings : MonoBehaviour
     /// <param name="id"></param>
     public void SelectedStoreCallback(string id)
     {
+        storeId = id;
         GetFood(id);
     }
 
@@ -255,6 +317,8 @@ public class ItemSettings : MonoBehaviour
     /// <param name="id"></param>
     private void SelectedFoodCallback(string id)
     {
-
+        foodList.Add(id);
+        UserInfo.SetActive(true);
+        UserInfo.GetComponent<UserInfo>().InitUserInfo(storeId, foodList);
     }
 }

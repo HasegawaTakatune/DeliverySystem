@@ -19,12 +19,12 @@ public class StoreItem : MonoBehaviour
     /// <summary>
     /// 店名
     /// </summary>
-    [SerializeField] private Text store;
+    [SerializeField] private Text store = default;
 
     /// <summary>
     /// アイコン
     /// </summary>
-    [SerializeField] private Image icon;
+    [SerializeField] private Image icon = default;
 
     /// <summary>
     /// 店ID

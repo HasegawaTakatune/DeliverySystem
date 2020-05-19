@@ -44,7 +44,12 @@ public class UserInfo : MonoBehaviour
     /// <summary>
     /// 注文ボタン
     /// </summary>
-    [SerializeField] private Button orderButton;
+    [SerializeField] private Button orderButton = default;
+
+    /// <summary>
+    /// OKダイアログ
+    /// </summary>
+    [SerializeField] private GameObject OKDialog = default;
 
     /// <summary>
     /// 店ID
@@ -55,6 +60,7 @@ public class UserInfo : MonoBehaviour
     /// </summary>
     private List<string> foodList = new List<string>();
 
+
     /// <summary>
     /// 初期化
     /// </summary>
@@ -64,6 +70,7 @@ public class UserInfo : MonoBehaviour
     {
         this.storeId = storeId;
         this.foodList = foodList;
+        gameObject.SetActive(true);
     }
 
     /// <summary>
@@ -91,7 +98,8 @@ public class UserInfo : MonoBehaviour
         {
             if (e == null)
             {
-
+                OKDialog.GetComponent<OKDialog>().ShowDialog("");
+                //OKDialog.SetActive(true);
             }
             else
             {
