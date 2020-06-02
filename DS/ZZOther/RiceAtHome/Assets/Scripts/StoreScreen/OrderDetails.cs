@@ -17,7 +17,8 @@ public class OrderDetails : MonoBehaviour
         public string userName;
         public string userAddress;
         public string userTelephone;
-        public string orderDate;
+        public string orderStartDate;
+        public string orderEndDate;
         public int state;
         public List<string> foodName;
         public List<int> foodPrice;
@@ -77,9 +78,13 @@ public class OrderDetails : MonoBehaviour
     /// </summary>
     [SerializeField] private Text UserTelephone = default;
     /// <summary>
-    /// 注文日付
+    /// 注文開始日付
     /// </summary>
-    [SerializeField] private Text OrderDate = default;
+    [SerializeField] private Text OrderStartDate = default;
+    /// <summary>
+    /// 注文終了日付
+    /// </summary>
+    [SerializeField] private Text OrderEndDate = default;
     /// <summary>
     /// ステータス
     /// </summary>
@@ -107,10 +112,11 @@ public class OrderDetails : MonoBehaviour
         UserName = transform.Find("UserName").GetComponent<Text>();
         UserAddress = transform.Find("UserAddress").GetComponent<Text>();
         UserTelephone = transform.Find("UserTelephone").GetComponent<Text>();
-        OrderDate = transform.Find("OrderDate").GetComponent<Text>();
+        OrderStartDate = transform.Find("OrderStartDate").GetComponent<Text>();
+        OrderEndDate = transform.Find("OrderEndDate").GetComponent<Text>();
         State = transform.Find("State").GetComponent<Dropdown>();
         Content = transform.Find("Foods").transform.Find("Viewport").Find("Content").gameObject;
-        Order = GameObject.Find("Order");
+        Order = transform.parent.Find("Order").gameObject;
     }
 
     /// <summary>
@@ -122,7 +128,7 @@ public class OrderDetails : MonoBehaviour
         UserName.text = "";
         UserAddress.text = "";
         UserTelephone.text = "";
-        OrderDate.text = "";
+        OrderStartDate.text = "";
         State.value = 0;
 
         foreach (Transform child in Content.transform)
@@ -159,22 +165,45 @@ public class OrderDetails : MonoBehaviour
         //    }
         //});
 
-
-
         switch (orderId)
         {
-            case "00000001":
+            case "STR000001":
+                detail.userName = "相浦　誠";
+                detail.userAddress = "ABCD 1234";
+                detail.userTelephone = "123456789";
+                detail.orderStartDate = "2020/04/11";
+                detail.orderEndDate = "2020/04/11";
+                detail.state = 0;
+                detail.foodName = new List<string>() { "唐揚げ", "軟骨唐揚げ", "ポテトフライ" };
+                detail.foodPrice = new List<int>() { 250, 300, 200 };
                 break;
 
-            case "00000002":
+            case "STR000002":
+                detail.userName = "天王洲　愛瑠";
+                detail.userAddress = "EFGH 5678";
+                detail.userTelephone = "111111111";
+                detail.orderStartDate = "2020/04/12";
+                detail.orderEndDate = "2020/04/12";
+                detail.state = 1;
+                detail.foodName = new List<string>() { "牛丼", "豚丼", "ネギトロ丼" };
+                detail.foodPrice = new List<int>() { 500, 450, 600 };
                 break;
 
-            case "00000003":
+            case "STR000003":
+                detail.userName = "武部　古杉";
+                detail.userAddress = "IJKL 9012";
+                detail.userTelephone = "000000000";
+                detail.orderStartDate = "2020/04/13";
+                detail.orderEndDate = string.Empty;
+                detail.state = 2;
+                detail.foodName = new List<string>() { "ハンバーガー", "てりやきバーガー", "エッグバーガー" };
+                detail.foodPrice = new List<int>() { 400, 600, 600 };
                 break;
 
             default:
                 break;
         }
+        ShowOrderDetails(detail);
     }
 
     /// <summary>
@@ -186,7 +215,17 @@ public class OrderDetails : MonoBehaviour
         UserName.text = detail.userName;
         UserAddress.text = detail.userAddress;
         UserTelephone.text = detail.userTelephone;
-        OrderDate.text = detail.orderDate;
+
+        if (string.IsNullOrEmpty(detail.orderStartDate))
+            OrderStartDate.text = "----------";
+        else
+            OrderStartDate.text = detail.orderStartDate;
+
+        if (string.IsNullOrEmpty(detail.orderEndDate))
+            OrderEndDate.text = "----------";
+        else
+            OrderEndDate.text = detail.orderEndDate;
+
         State.value = detail.state;
 
         for (int i = 0; i < detail.foodName.Count; i++)

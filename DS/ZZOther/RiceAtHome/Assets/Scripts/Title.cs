@@ -23,7 +23,12 @@ public class Title : MonoBehaviour
     /// <summary>
     /// ユーザ判定
     /// </summary>
-    public bool IsUser = true;
+    public bool IsUserMode = true;
+
+    /// <summary>
+    /// 開始と同時に実行するかを判定
+    /// </summary>
+    [SerializeField] private bool playOnAwake = true;
 
     /// <summary>
     /// リセットイベント
@@ -42,7 +47,9 @@ public class Title : MonoBehaviour
     {
         UserScreen.SetActive(false);
         StoreScreen.SetActive(false);
-        StartCoroutine(ShowTitle());
+
+        if (playOnAwake)
+            StartCoroutine(ShowTitle());
     }
 
     /// <summary>
@@ -52,8 +59,8 @@ public class Title : MonoBehaviour
     private IEnumerator ShowTitle()
     {
         Color color = Color.clear;
-        float interval = 0.01f;
-
+        float interval = Time.deltaTime * 0.1f;
+        
         // タイトルフレームイン
         while (color.a <= 1)
         {
@@ -71,7 +78,7 @@ public class Title : MonoBehaviour
         gameObject.SetActive(false);
 
         // ユーザ/店ごとに画面を表示する
-        if (IsUser)
+        if (IsUserMode)
             UserScreen.SetActive(true);
         else
             StoreScreen.SetActive(true);

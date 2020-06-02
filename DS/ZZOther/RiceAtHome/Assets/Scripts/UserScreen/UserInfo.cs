@@ -11,6 +11,15 @@ using System;
 public class UserInfo : MonoBehaviour
 {
     /// <summary>
+    /// コールバックイベント
+    /// </summary>
+    public delegate void CALLBACK();
+    /// <summary>
+    /// コールバックイベント
+    /// </summary>
+    private CALLBACK callback;
+
+    /// <summary>
     /// 注文マスタ
     /// </summary>
     private const string ORDER_MASTER_TABLE = "OrderMaster";
@@ -57,7 +66,7 @@ public class UserInfo : MonoBehaviour
     /// <summary>
     /// OKダイアログ
     /// </summary>
-    [SerializeField] private GameObject OKDialog = default;
+    [SerializeField] private OKDialog OKDialog = default;
 
     /// <summary>
     /// 店ID
@@ -75,7 +84,7 @@ public class UserInfo : MonoBehaviour
     {
         InputFields = gameObject.GetComponentsInChildren<InputField>();
         OrderButton = transform.Find("OrderButton").GetComponent<Button>();
-        OKDialog = GameObject.Find("OKDialog");
+        OKDialog = GameObject.Find("OKDialog").GetComponent<OKDialog>();
     }
 
     /// <summary>
@@ -89,6 +98,7 @@ public class UserInfo : MonoBehaviour
         this.foodList = foodList;
         gameObject.SetActive(true);
         OrderButton.interactable = false;
+        OnValueChanged();
     }
 
     /// <summary>
@@ -125,6 +135,9 @@ public class UserInfo : MonoBehaviour
 
         //    }
         //});
+
+        OKDialog.AddCallback(OnClickOKCallback);
+        OKDialog.ShowDialog("登録が完了しました。");
     }
 
     /// <summary>
@@ -141,4 +154,22 @@ public class UserInfo : MonoBehaviour
         OrderButton.interactable = isInteractable;
     }
 
+    /// <summary>
+    /// コールバックイベントの追加
+    /// </summary>
+    /// <param name="callback"></param>
+    public void AddCollback(CALLBACK callback)
+    {
+        this.callback += callback;
+    }
+
+    /// <summary>
+    /// OKボタンを押した際のコールバックイベント
+    /// </summary>
+    private void OnClickOKCallback()
+    {
+        callback?.Invoke();
+        gameObject.SetActive(false);
+        OKDialog.RemoveCallback(OnClickOKCallback);
+    }
 }

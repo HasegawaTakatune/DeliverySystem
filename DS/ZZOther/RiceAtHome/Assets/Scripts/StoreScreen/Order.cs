@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 //using NCMB;
+using Common;
 
     /// <summary>
     /// 注文の表示/選択を制御する
@@ -37,20 +38,7 @@ public class Order : MonoBehaviour
     /// ステータス
     /// </summary>
     private const string STATE_COLUMN = "State";
-
-    /// <summary>
-    /// 未配達
-    /// </summary>
-    private const int UNDELIVERED = 0;
-    /// <summary>
-    /// 配達中
-    /// </summary>
-    private const int INDELIVERY = 1;
-    /// <summary>
-    /// 配達完了
-    /// </summary>
-    private const int COMPLETION = 2;
-
+       
     /// <summary>
     /// コンテンツ
     /// </summary>
@@ -90,8 +78,8 @@ public class Order : MonoBehaviour
     /// <param name="nameList"></param>
     /// <param name="dateList"></param>
     /// <param name="stateList"></param>
-    /// <param name="idList"></param>
-    private void ShowOrderContent(List<string> nameList, List<string> dateList, List<int> stateList, List<string> idList)
+    /// <param name="orderIdList"></param>
+    private void ShowOrderContent(List<string> nameList, List<string> dateList, List<int> stateList, List<string> orderIdList)
     {
 
         ClearContent();
@@ -100,7 +88,7 @@ public class Order : MonoBehaviour
         {
             GameObject item = Instantiate(OrderItem, Content.transform);
             OrderItem order = item.GetComponent<OrderItem>();
-            order.Initialization(nameList[i], dateList[i], stateList[i], idList[i]);
+            order.Initialization(nameList[i], dateList[i], stateList[i], orderIdList[i]);
             order.AddCollback(SelectedOrderCallback);
         }
 
@@ -145,18 +133,17 @@ public class Order : MonoBehaviour
         List<string> nameList = new List<string>() { "相浦　誠", "天王洲　愛瑠", "武部　古杉" };
         List<string> dateList = new List<string>() { "2020/04/11", "2020/04/12", "2020/04/13" };
         List<int> stateList = new List<int>() { state, state, state };
-        List<string> idList = new List<string>() { "00000001", "00000002", "00000003" };
-        ShowOrderContent(nameList, dateList, stateList, idList);
+        List<string> orderIdList = new List<string>() { "STR000001", "STR000002", "STR000003" };
+        ShowOrderContent(nameList, dateList, stateList, orderIdList);
     }
 
     /// <summary>
     /// 注文を選択した際のコールバックイベント
     /// </summary>
-    /// <param name="id"></param>
-    private void SelectedOrderCallback(string id)
+    /// <param name="orderId"></param>
+    private void SelectedOrderCallback(string orderId)
     {
-        OrderDetails.Show(id);
+        OrderDetails.Show(orderId);
         gameObject.SetActive(false);
     }
-
 }

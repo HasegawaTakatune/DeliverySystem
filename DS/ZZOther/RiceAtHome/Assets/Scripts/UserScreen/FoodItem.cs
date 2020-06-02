@@ -61,7 +61,7 @@ public class FoodItem : MonoBehaviour
     {
         this.food.text = name;
         this.price.text = price.ToString() + "円";
-        this.image.sprite = sprite;
+        //this.image.sprite = sprite;
         this.id = id;
     }
 
@@ -75,7 +75,7 @@ public class FoodItem : MonoBehaviour
     }
 
     /// <summary>
-    /// コールバック追加
+    /// 食品アイテムクリック時のコールバック追加
     /// </summary>
     /// <param name="callback"></param>
     public void AddCallback(CALLBACK callback)
@@ -84,10 +84,10 @@ public class FoodItem : MonoBehaviour
     }
 
     /// <summary>
-    /// クリックイベント
+    /// 食品アイテムのクリックイベント
     /// </summary>
-    public void OnClickEvent()
+    public void OnClickFoodItem()
     {
-        callback(id);
+        callback?.Invoke(id);
     }
 }

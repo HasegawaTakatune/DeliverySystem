@@ -8,19 +8,6 @@ using UnityEngine;
 public class Top : MonoBehaviour
 {
     /// <summary>
-    /// 未配達
-    /// </summary>
-    private const int UNDELIVERED = 0;
-    /// <summary>
-    /// 配達中
-    /// </summary>
-    private const int INDELIVERY = 1;
-    /// <summary>
-    /// 配達完了
-    /// </summary>
-    private const int COMPLETION = 2;
-
-    /// <summary>
     /// オーダー
     /// </summary>
     [SerializeField] private Order Order = default;
@@ -37,8 +24,9 @@ public class Top : MonoBehaviour
     /// 選択イベント
     /// </summary>
     /// <param name="state"></param>
-    public void OnClickSelect(int state)
+    public void OnClickSelect(int state = 0)
     {
+        gameObject.SetActive(false);
         Order.Show("0000001", state);
     }
 

@@ -57,7 +57,7 @@ public class StoreItem : MonoBehaviour
     }
 
     /// <summary>
-    /// コールバック追加
+    /// 店アイテムクリック時のコールバック追加
     /// </summary>
     /// <param name="callback"></param>
     public void AddCallback(CALLBACK callback)
@@ -66,10 +66,10 @@ public class StoreItem : MonoBehaviour
     }
 
     /// <summary>
-    /// クリックイベント
+    /// 店アイテムのクリックイベント
     /// </summary>
-    public void OnClickEvent()
+    public void OnClickStoreItem()
     {
-        callback(id);
+        callback?.Invoke(id);
     }
 }

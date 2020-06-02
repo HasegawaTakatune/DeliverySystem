@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 //using NCMB;
 
-    /// <summary>
-    /// ユーザ画面の店選択/食品選択の表示を制御する
-    /// </summary>
+/// <summary>
+/// ユーザ画面の店選択/食品選択の表示を制御する
+/// </summary>
 public class ItemSettings : MonoBehaviour
 {
     /// <summary>
@@ -68,7 +68,7 @@ public class ItemSettings : MonoBehaviour
     /// <summary>
     /// ユーザ情報
     /// </summary>
-    [SerializeField] private GameObject UserInfo = default;
+    [SerializeField] private UserInfo UserInfo = default;
 
     /// <summary>
     /// 店ID
@@ -94,7 +94,7 @@ public class ItemSettings : MonoBehaviour
         FoodScrollView = transform.Find("FoodScrollView").gameObject;
         FoodContent = FoodScrollView.transform.Find(Viewport).Find(Content).gameObject;
 
-        UserInfo = transform.Find("UserInfo").gameObject;
+        UserInfo = transform.Find("UserInfo").GetComponent<UserInfo>();
     }
 
     /// <summary>
@@ -102,6 +102,7 @@ public class ItemSettings : MonoBehaviour
     /// </summary>
     private void Start()
     {
+        UserInfo.AddCollback(OnClickOrderCallback);
         GetStore();
     }
 
@@ -375,6 +376,15 @@ public class ItemSettings : MonoBehaviour
         FoodScrollView.SetActive(false);
 
         foodList.Add(id);
-        UserInfo.GetComponent<UserInfo>().InitUserInfo(storeId, foodList);
+        UserInfo.InitUserInfo(storeId, foodList);
+    }
+
+    /// <summary>
+    /// 注文した際のコールバックイベント
+    /// </summary>
+    private void OnClickOrderCallback()
+    {
+        StoreScrollView.SetActive(true);
+        GetStore();
     }
 }

@@ -200,7 +200,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 8385743044037170450}
-        m_MethodName: OnClickEvent
+        m_MethodName: OnClickFoodItem
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
