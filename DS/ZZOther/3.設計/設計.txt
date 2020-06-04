@@ -1,4 +1,4 @@
-
+--Template--
 {Class}
-┣[property]
+┣<meethod>
 ┗<meethod>
